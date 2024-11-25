@@ -18,11 +18,16 @@
   },
   "homepage": "https://github.com/dharshanikaan/https---github.com-dharshanikaan-charity#readme",
   "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.4",
-    "sequelize": "^6.37.5"
+    "razorpay": "^2.9.5",
+    "sequelize": "^6.37.5",
+    "sib-api-v3-sdk": "^8.5.0"
   }
 }

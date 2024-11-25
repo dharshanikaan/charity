@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header, footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    section {
+      margin: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    input, button {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #5cb85c;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4cae4c;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Donation Platform</h1>
+</header>
+
+<main>
+  <!-- User Registration -->
+  <section id="register-section">
+    <h2>User Registration</h2>
+    <form id="register-form">
+      <div class="form-group">
+        <label for="register-name">Name</label>
+        <input type="text" id="register-name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="register-email">Email</label>
+        <input type="email" id="register-email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="register-password">Password</label>
+        <input type="password" id="register-password" name="password" required>
+      </div>
+      <button type="submit">Register</button>
+    </form>
+  </section>
+
+  <!-- User Login -->
+  <section id="login-section">
+    <h2>User Login</h2>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </section>
+
+  <!-- Charity Registration -->
+  <section id="charity-register-section">
+    <h2>Charity Registration</h2>
+    <form id="charity-register-form">
+      <div class="form-group">
+        <label for="charity-name">Charity Name</label>
+        <input type="text" id="charity-name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="charity-email">Email</label>
+        <input type="email" id="charity-email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="charity-password">Password</label>
+        <input type="password" id="charity-password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="charity-location">Location</label>
+        <input type="text" id="charity-location" name="location" required>
+      </div>
+      <div class="form-group">
+        <label for="charity-category">Category</label>
+        <input type="text" id="charity-category" name="category" required>
+      </div>
+      <button type="submit">Register Charity</button>
+    </form>
+  </section>
+
+  <!-- Project Creation -->
+  <section id="create-project-section">
+    <h2>Create a Project</h2>
+    <form id="create-project-form">
+      <div class="form-group">
+        <label for="project-title">Project Title</label>
+        <input type="text" id="project-title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="project-description">Description</label>
+        <textarea id="project-description" name="description" rows="4" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="project-donation-goal">Donation Goal</label>
+        <input type="number" id="project-donation-goal" name="donationGoal" required>
+      </div>
+      <button type="submit">Create Project</button>
+    </form>
+  </section>
+
+  <!-- Donation Creation -->
+  <section id="create-donation-section">
+    <h2>Create a Donation</h2>
+    <form id="create-donation-form">
+      <div class="form-group">
+        <label for="donation-amount">Amount</label>
+        <input type="number" id="donation-amount" name="amount" required>
+      </div>
+      <div class="form-group">
+        <label for="donation-project">Project</label>
+        <select id="donation-project" name="projectId" required>
+          <!-- Dynamic project options will be added here -->
+        </select>
+      </div>
+      <button type="submit">Donate</button>
+    </form>
+  </section>
+
+  <!-- Donation History -->
+  <section id="donation-history-section">
+    <h2>Your Donation History</h2>
+    <div id="donation-history"></div>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2024 Donation Platform</p>
+</footer>
+
+<script>
+  // Register User
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('register-name').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  });
+
+  // Login User
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const result = await response.json();
+    if (result.token) {
+      localStorage.setItem('token', result.token);
+      alert('Login successful');
+    } else {
+      alert(result.error);
+    }
+  });
+
+  // Register Charity
+  document.getElementById('charity-register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('charity-name').value;
+    const email = document.getElementById('charity-email').value;
+    const password = document.getElementById('charity-password').value;
+    const location = document.getElementById('charity-location').value;
+    const category = document.getElementById('charity-category').value;
+
+    const response = await fetch('/api/charity/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password, location, category })
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  });
+
+  // Create Project
+  document.getElementById('create-project-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('project-title').value;
+    const description = document.getElementById('project-description').value;
+    const donationGoal = document.getElementById('project-donation-goal').value;
+
+    const token = localStorage.getItem('token');
+    const response = await fetch('/api/project/create', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': `Bearer ${token}` 
+      },
+      body: JSON.stringify({ title, description, donationGoal })
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  });
+
+  // Create Donation
+  document.getElementById('create-donation-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const amount = document.getElementById('donation-amount').value;
+    const projectId = document.getElementById('donation-project').value;
+
+    const token = localStorage.getItem('token');
+    const response = await fetch('/api/donation/create', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': `Bearer ${token}` 
+      },
+      body: JSON.stringify({ amount, projectId })
+    });
+
+    const result = await response.json();
+    alert(result.message);
+  });
+
+  // Load Projects for Donations
+  async function loadProjects() {
+    const response = await fetch('/api/projects');
+    const projects = await response.json();
+
+    const select = document.getElementById('donation-project');
+    projects.forEach(project => {
+      const option = document.createElement('option');
+      option.value = project.id;
+      option.textContent = project.title;
+      select.appendChild(option);
+    });
+  }
+
+  loadProjects();
+</script>
+
+</body>
+</html>

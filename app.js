@@ -1,40 +1,40 @@
 require('dotenv').config({ path: '../expenseapppassword/.env' });
 const express = require("express");
+const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./utils/database");
 
+// Import routes
+const userRoutes = require("./routes/user");
+const donationRoutes = require("./routes/donation");
+const charityRoutes = require("./routes/charity");
+const projectRoutes = require("./routes/project");
+const reportRoutes = require("./routes/report");
+const downloadRoutes = require("./routes/download");
 
-
+const app = express();
 const port = process.env.PORT || 3000;
 
-// routes
-const user = require("./routes/user");
-const donation = require("./routes/donation");
-const charity = require("./routes/charity");
-const project = require("./routes/project");
-const download = require("./routes/download");
-const report = require("./routes/report");
-// models
-
-const corsOptions = {
-  origin: ["http://localhost:3000"],
-  credentials: true,
-  method: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
-
-// middleware
-const app = express();
-app.use(cors(corsOptions));
+// Middleware
 app.use(bodyParser.json());
-app.use("/api/users", user);
-app.use("/api/donations", donation);
-app.use("/api/charities", charity);
-app.use("/api/projects", project);
-app.use("/api/", download);
-app.use("/api/reports", report);
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files like JS, CSS
 
+// Routes
+app.use("/api/users", userRoutes);
+app.use("/api/donations", donationRoutes);
+app.use("/api/charities", charityRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/", downloadRoutes);
+
+// Serve the HTML file for the registration and login page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Database connection
 async function testConnection() {
   try {
     await db.authenticate();
@@ -44,8 +44,9 @@ async function testConnection() {
     console.error("Unable to connect to the database:", error);
   }
 }
+
 testConnection();
 
 app.listen(port, () => {
-  console.log("Server started on port 3000");
+  console.log(`Server running on http://localhost:${port}`);
 });

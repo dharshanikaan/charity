@@ -1,7 +1,7 @@
 const Charity = require("../models/charity");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const sequelize = require("../utils/databse");
+const sequelize = require("../utils/database");
 const Email = require("../services/emailService");
 
 exports.register = async (req, res) => {
