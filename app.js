@@ -1,9 +1,11 @@
+require('dotenv').config({ path: '../expenseapppassword/.env' });
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./utils/database");
-const dotenv = require("dotenv");
-dotenv.config();
+
+
+
 const port = process.env.PORT || 3000;
 
 // routes
@@ -12,7 +14,7 @@ const donation = require("./routes/donation");
 const charity = require("./routes/charity");
 const project = require("./routes/project");
 const download = require("./routes/download");
-const report = require("./routes/impactReport");
+const report = require("./routes/report");
 // models
 
 const corsOptions = {

@@ -1,8 +1,9 @@
+require('dotenv').config({ path: '../expenseapppassword/.env' });
+const dotenv = require("dotenv");
 const Donation = require("../models/donation");
 const Razorpay = require("razorpay");
 const Project = require("../models/project");
 const sequelize = require("../utils/database");
-const dotenv = require("dotenv");
 const Email = require("../services/emailService");
 
 

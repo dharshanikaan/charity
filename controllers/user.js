@@ -2,7 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-dotenv.config();
+require('dotenv').config({ path: '../expenseapppassword/.env' });
 
 exports.register = async (req, res) => {
   const { name, email, phone, address, isAdmin, password } = req.body;
