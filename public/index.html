@@ -8,68 +8,51 @@
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav>
-        <a href="#" id="homePage">Home</a>
-        <a href="#" id="loginPage">Login</a>
-        <a href="#" id="registerPage">Register</a>
-        <a href="#" id="profilePage" style="display:none;">Profile</a>
-        <a href="#" id="donationsPage" style="display:none;">Donations</a>
-        <a href="#" id="charityPage" style="display:none;">Manage Charity</a>
-    </nav>
-
     <!-- Main Content Area -->
     <div id="mainContent">
+        <!-- Home Page -->
+        <div id="homePage" style="display:block;">
+            <h1>Welcome to the Charity Platform</h1>
+            <div id="authLinks">
+                <button id="registerLink">Register</button>
+                <button id="loginLink">Login</button>
+            </div>
+        </div>
+
         <!-- Register Form -->
         <div id="registerForm" style="display:none;">
             <h2>Register</h2>
-            <form id="registerForm">
+            <form id="registerFormElement">
                 <input type="text" id="registerName" placeholder="Name" required>
                 <input type="email" id="registerEmail" placeholder="Email" required>
-                <input type="text" id="registerPhone" placeholder="Phone" required>
-                <input type="text" id="registerAddress" placeholder="Address" required>
                 <input type="password" id="registerPassword" placeholder="Password" required>
                 <button type="submit">Register</button>
             </form>
+            <button id="backToHomeFromRegister">Back to Home</button>
         </div>
 
         <!-- Login Form -->
         <div id="loginForm" style="display:none;">
             <h2>Login</h2>
-            <form id="loginForm">
+            <form id="loginFormElement">
                 <input type="email" id="loginEmail" placeholder="Email" required>
                 <input type="password" id="loginPassword" placeholder="Password" required>
                 <button type="submit">Login</button>
             </form>
+            <button id="backToHomeFromLogin">Back to Home</button>
         </div>
 
-        <!-- User Profile -->
-        <div id="profileInfo" style="display:none;">
-            <h2>User Profile</h2>
-            <div id="profileDetails"></div>
-            <button id="logoutButton">Logout</button>
-        </div>
-
-        <!-- Donation -->
-        <div id="donationForm" style="display:none;">
-            <h2>Create Donation</h2>
-            <form id="donationForm">
-                <input type="number" id="donationAmount" placeholder="Amount" required>
-                <input type="text" id="donationProjectId" placeholder="Project ID" required>
-                <button type="submit">Donate</button>
-            </form>
-        </div>
-
-        <!-- Charity Management -->
-        <div id="charityForm" style="display:none;">
-            <h2>Manage Charity</h2>
-            <form id="charityForm">
-                <input type="text" id="charityName" placeholder="Charity Name" required>
-                <input type="email" id="charityEmail" placeholder="Email" required>
-                <input type="text" id="charityMission" placeholder="Mission" required>
-                <input type="text" id="charityGoals" placeholder="Goals" required>
-                <button type="submit">Submit</button>
-            </form>
+        <!-- Dashboard Page (After login) -->
+        <div id="dashboardPage" style="display:none;">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Donations</a></li>
+                <li><a href="#">Manage Charity</a></li>
+                <li><a href="#">Manage Projects</a></li>
+                <li><a href="#">Reports</a></li>
+            </ul>
+            <button id="logoutLink">Logout</button>
         </div>
 
     </div>
