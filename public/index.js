@@ -1,105 +1,129 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const homePage = document.getElementById('homePage');
-    const registerPage = document.getElementById('registerForm');
-    const loginPage = document.getElementById('loginForm');
-    const dashboardPage = document.getElementById('dashboardPage');
-    const registerLink = document.getElementById('registerLink');
-    const loginLink = document.getElementById('loginLink');
-    const backToHomeFromRegister = document.getElementById('backToHomeFromRegister');
-    const backToHomeFromLogin = document.getElementById('backToHomeFromLogin');
-    const logoutLink = document.getElementById('logoutLink');
-    const authLinks = document.getElementById('authLinks');
-    
     const token = localStorage.getItem('authToken');
 
-    // Toggle pages based on login status
-    function togglePagesVisibility() {
-        if (token) {
-            // If logged in, show Dashboard and Logout, hide Home and Auth Links
-            dashboardPage.style.display = 'block';
-            logoutLink.style.display = 'inline';
-            authLinks.style.display = 'none';
-            homePage.style.display = 'none';
-        } else {
-            // If not logged in, show Home and Auth Links, hide other pages
-            dashboardPage.style.display = 'none';
-            logoutLink.style.display = 'none';
-            authLinks.style.display = 'block';
-            homePage.style.display = 'block';
-        }
+    // Elements
+    const homePage = document.getElementById('homePage');
+    const dashboardPage = document.getElementById('dashboardPage');
+    const profilePage = document.getElementById('profilePage');
+    const donationsPage = document.getElementById('donationsPage');
+    const manageCharityPage = document.getElementById('manageCharityPage');
+    const manageProjectsPage = document.getElementById('manageProjectsPage');
+    const reportsPage = document.getElementById('reportsPage');
+
+    const profileLink = document.getElementById('profileLink');
+    const donationsLink = document.getElementById('donationsLink');
+    const manageCharityLink = document.getElementById('manageCharityLink');
+    const manageProjectsLink = document.getElementById('manageProjectsLink');
+    const reportsLink = document.getElementById('reportsLink');
+
+    const backToDashboardFromProfile = document.getElementById('backToDashboardFromProfile');
+    const backToDashboardFromDonations = document.getElementById('backToDashboardFromDonations');
+    const backToDashboardFromManageCharity = document.getElementById('backToDashboardFromManageCharity');
+    const backToDashboardFromManageProjects = document.getElementById('backToDashboardFromManageProjects');
+    const backToDashboardFromReports = document.getElementById('backToDashboardFromReports');
+
+    const logoutLink = document.getElementById('logoutLink');
+    const registerLink = document.getElementById('registerLink');
+    const loginLink = document.getElementById('loginLink');
+
+    // Show Dashboard after login
+    function showDashboard() {
+        homePage.style.display = 'none';
+        dashboardPage.style.display = 'block';
     }
 
-    // Show Register page
-    registerLink.addEventListener('click', () => {
-        homePage.style.display = 'none';
-        registerPage.style.display = 'block';
-    });
-
-    // Register User
-    document.getElementById('registerFormElement').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('registerName').value;
-        const email = document.getElementById('registerEmail').value;
-        const password = document.getElementById('registerPassword').value;
-
-        // Simulate registration success (replace with actual API)
-        const success = true;
-
-        if (success) {
-            alert('Registration successful!');
-            homePage.style.display = 'block';
-            registerPage.style.display = 'none';
-            togglePagesVisibility();  // Ensure correct page visibility after registration
-        } else {
-            alert('Error during registration. Please try again.');
-        }
-    });
-
-    // Show Login page
-    loginLink.addEventListener('click', () => {
-        homePage.style.display = 'none';
-        loginPage.style.display = 'block';
-    });
-
-    // Login User
-    document.getElementById('loginFormElement').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-
-        // Simulate login success (replace with actual API)
-        const success = true;
-
-        if (success) {
-            localStorage.setItem('authToken', 'token'); // Store auth token
-            alert('Login successful!');
-            togglePagesVisibility();  // Redirect to the Dashboard page after login
-            loginPage.style.display = 'none';
-            dashboardPage.style.display = 'block';  // Show the dashboard after login
-        } else {
-            alert('Login failed. Please check your credentials.');
-        }
-    });
-
-    // Back to home from Register page
-    backToHomeFromRegister.addEventListener('click', () => {
-        registerPage.style.display = 'none';
+    // Show Home page and hide others
+    function showHomePage() {
         homePage.style.display = 'block';
+        dashboardPage.style.display = 'none';
+    }
+
+    // Show Profile Page
+    profileLink.addEventListener('click', () => {
+        dashboardPage.style.display = 'none';
+        profilePage.style.display = 'block';
     });
 
-    // Back to home from Login page
-    backToHomeFromLogin.addEventListener('click', () => {
-        loginPage.style.display = 'none';
-        homePage.style.display = 'block';
+    // Show Donations Page
+    donationsLink.addEventListener('click', () => {
+        dashboardPage.style.display = 'none';
+        donationsPage.style.display = 'block';
+    });
+
+    // Show Manage Charity Page
+    manageCharityLink.addEventListener('click', () => {
+        dashboardPage.style.display = 'none';
+        manageCharityPage.style.display = 'block';
+    });
+
+    // Show Manage Projects Page
+    manageProjectsLink.addEventListener('click', () => {
+        dashboardPage.style.display = 'none';
+        manageProjectsPage.style.display = 'block';
+    });
+
+    // Show Reports Page
+    reportsLink.addEventListener('click', () => {
+        dashboardPage.style.display = 'none';
+        reportsPage.style.display = 'block';
+    });
+
+    // Back to Dashboard from Profile
+    backToDashboardFromProfile.addEventListener('click', () => {
+        profilePage.style.display = 'none';
+        dashboardPage.style.display = 'block';
+    });
+
+    // Back to Dashboard from Donations
+    backToDashboardFromDonations.addEventListener('click', () => {
+        donationsPage.style.display = 'none';
+        dashboardPage.style.display = 'block';
+    });
+
+    // Back to Dashboard from Manage Charity
+    backToDashboardFromManageCharity.addEventListener('click', () => {
+        manageCharityPage.style.display = 'none';
+        dashboardPage.style.display = 'block';
+    });
+
+    // Back to Dashboard from Manage Projects
+    backToDashboardFromManageProjects.addEventListener('click', () => {
+        manageProjectsPage.style.display = 'none';
+        dashboardPage.style.display = 'block';
+    });
+
+    // Back to Dashboard from Reports
+    backToDashboardFromReports.addEventListener('click', () => {
+        reportsPage.style.display = 'none';
+        dashboardPage.style.display = 'block';
     });
 
     // Logout
     logoutLink.addEventListener('click', () => {
         localStorage.removeItem('authToken');
         alert('Logged out successfully');
-        togglePagesVisibility();  // Redirect to Home after logout
+        showHomePage();  // Show Home page after logout
     });
 
-    // Initial page setup
-    togglePagesVisibility();
+    // Register User
+    registerLink.addEventListener('click', () => {
+        // For simplicity, simulate registration success (use real API in production)
+        alert('Registration successful!');
+        showHomePage();  // Go back to home page after registration
+    });
+
+    // Login User
+    loginLink.addEventListener('click', () => {
+        // For simplicity, simulate login success (use real API in production)
+        localStorage.setItem('authToken', 'fakeAuthToken');
+        alert('Login successful!');
+        showDashboard();  // Redirect to Dashboard after login
+    });
+
+    // Show the correct page based on login status
+    if (token) {
+        showDashboard();
+    } else {
+        showHomePage();
+    }
 });
