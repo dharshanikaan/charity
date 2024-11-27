@@ -29,10 +29,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/", downloadRoutes);
 
-// Serve the HTML file for the registration and login page
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+
 
 // Database connection
 async function testConnection() {
