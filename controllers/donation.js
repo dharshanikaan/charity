@@ -1,16 +1,15 @@
 require('dotenv').config({ path: '../expenseapppassword/.env' });
-const dotenv = require("dotenv");
+
 const Donation = require("../models/donation");
 const Razorpay = require("razorpay");
+const User = require('../models/user');
 const Project = require("../models/project");
 const sequelize = require("../utils/database");
 const Email = require("../services/emailService");
 
+const { validateWebhookSignature } = require("razorpay/dist/utils/razorpay-utils");
 
-const {
-  validateWebhookSignature,
-} = require("razorpay/dist/utils/razorpay-utils");
-dotenv.config();
+require('dotenv').config({ path: '../expenseapppassword/.env' });
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -24,14 +23,13 @@ exports.createDonation = async (req, res) => {
 
   try {
     const Order = await razorpay.orders.create({
-      amount: amount ,
+      amount: amount * 100,  // Amount should be in paise for Razorpay
       currency: "INR",
-  
     });
 
     await Donation.create(
       {
-        amount,
+        amount,  // Store the amount in INR (not paise)
         projectId,
         userId: user,
         status: "pending",
@@ -39,9 +37,12 @@ exports.createDonation = async (req, res) => {
       },
       { transaction: t }
     );
+
     await t.commit();
     res.status(200).json({
-      message: "Donation created successfully", Order});
+      message: "Donation created successfully",
+      Order
+    });
   } catch (error) {
     await t.rollback();
     console.log(error);
@@ -49,53 +50,72 @@ exports.createDonation = async (req, res) => {
   }
 };
 
-exports.updateTransaction = async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-    req.body;
+
+exports.updateTransactionManually = async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id } = req.body;
 
   try {
-    // validate the payment signature
-    const isValidSignature = await validateWebhookSignature(
-      razorpay_order_id + "|" + razorpay_payment_id,
-      razorpay_signature,
-      process.env.RAZORPAY_KEY_SECRET
-    );
-
-    if (!isValidSignature) {
-      return res.status(400).json({ message: "Invalid signature" });
-    }
-
-    // find the order and update payment details
-    const order = await Donation.findOne({
+    // Find the donation record using the razorpay_order_id
+    const donation = await Donation.findOne({
       where: { order_id: razorpay_order_id },
     });
-    if (!order) {
+
+    // Check if the donation record exists
+    if (!donation) {
+      console.log('Order not found');
       return res.status(404).json({ message: "Order not found" });
     }
 
-    order.payment_id = razorpay_payment_id;
-    order.status = "paid";
-    await order.save();
+    // Check if the donation is already marked as "paid"
+    if (donation.status === "paid") {
+      return res.status(400).json({ message: "This donation has already been paid." });
+    }
 
-    // update the current donations of the project
+    // Update the donation's status and payment_id
+    donation.payment_id = razorpay_payment_id;  // Save the payment ID
+    donation.status = "paid";  // Change status to "paid"
+    await donation.save();  // Save the donation with updated status
+
+    // Log successful payment update
+    console.log('Payment successful for order ID:', razorpay_order_id);
+    console.log('Updated order status to "paid"');
+
+    // Update the project donations total
     const currDonation = await Project.findOne({
-      where: { id: order.projectId },
+      where: { id: donation.projectId },
     });
-    currDonation.currentDonations += order.amount;
-    await currDonation.save();
-    
-    // send email to the user
-    const user = await user.findOne({
-      where: { id: order.userId },
-    });
-    Email.sendEmail({ email: user.email, subject: "Donation Successfull", textContent: "Your Donation has been received successfully. Thank you for your support!" });
 
-    res.status(200).json({ status: "success" });
+    if (currDonation) {
+      // Add the donation amount to the project's current donations
+      currDonation.currentDonations += donation.amount;  // No need to divide by 100 if donation.amount is in INR
+
+   
+      await currDonation.save(); // Save the updated currentDonations
+
+      // Log the updated donations value
+      console.log(`Updated project donations for project ID: ${currDonation.id}, new total: ₹${currDonation.currentDonations}`);
+    }
+
+    // Send an email notification to the user
+    const user = await User.findOne({ where: { id: donation.userId } });
+    if (user) {
+      // Sending a success email to the donor
+      await Email.sendEmail({
+        email: user.email,
+        subject: "Donation Successful",
+        textContent: `Your donation of ₹${donation.amount.toFixed(2)} has been successfully received. Thank you for your support!`,
+      });
+      console.log(`Email sent to user: ${user.email}`);
+    }
+
+    // Respond to the client
+    res.status(200).json({ message: "Donation updated successfully", status: "paid" });
   } catch (error) {
-    console.log(error);
+    console.log('Error during transaction update:', error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 exports.getDonation = async (req, res) => {
   try {
@@ -103,8 +123,7 @@ exports.getDonation = async (req, res) => {
 
     const donations = await Donation.findAll({
       where: { userId },
-      attributes: ["id","order_id" ,"amount", "status", "createdAt"],
-
+      attributes: ["id", "order_id", "amount", "status", "createdAt"],
       order: [["createdAt", "DESC"]],
     });
 

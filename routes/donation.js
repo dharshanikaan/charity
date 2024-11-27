@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 
 router.get("/fetch", auth.authMiddleware, donation.getDonation);
 router.post("/create", auth.authMiddleware, donation.createDonation);
-router.patch("/updateTransaction", auth.authMiddleware, donation.updateTransaction);
+router.patch("/updateTransactionManually", auth.authMiddleware, donation.updateTransactionManually);
 router.get("/fetchHistory", auth.authMiddleware, donation.getDonationHistory);
 
 module.exports = router;
